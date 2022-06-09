@@ -90,7 +90,6 @@ try {
                     Console.WriteLine(result?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -147,7 +146,6 @@ try {
                     Console.WriteLine(result?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -177,7 +175,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -211,7 +209,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -242,7 +240,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -270,7 +268,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -298,7 +296,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -328,7 +326,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -360,7 +358,7 @@ try {
                     Console.WriteLine(cfPayResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -393,7 +391,7 @@ try {
             }
             catch (ApiException e)
             {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -420,7 +418,7 @@ try {
                     Console.WriteLine(cfOrderResponse.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -445,7 +443,7 @@ try {
                     Console.WriteLine(response?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -470,7 +468,7 @@ try {
                     Console.WriteLine(response?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -499,7 +497,7 @@ try {
                     Console.WriteLine(response?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -524,7 +522,7 @@ try {
                     Console.WriteLine(response?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -548,7 +546,7 @@ try {
                     Console.WriteLine(response?.cfHeaders);
                 }
 } catch (ApiException e) {
-                Console.WriteLine("Exception when calling OrdersApi.CreateOrder: " + e.Message );
+                
                 Console.WriteLine("Status Code: "+ e.ErrorCode);
                 Console.WriteLine(e.StackTrace);
                 if(e.cFError != null) {
@@ -561,3 +559,158 @@ try {
 
 Amount associated with a particular orderID where the transaction has gone through can be refunded using this API. Below is the code snippet to initiate the refund.
 
+```
+try {
+                CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
+                CFConfig cfConfig = getConfig();
+                CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
+
+                CFRefundRequest cfRefundRequest = new CFRefundRequest(refundAmount, refundId, "Testing from dotnet", null);
+
+                CFRefundResponse response = apiInstance.createRefund(cfConfig, order_id_for_refund, cfRefundRequest, null);
+                
+                if(response != null) {
+                    Console.WriteLine(response.cfRefund.RefundAmount);
+                    Console.WriteLine(response.cfHeaders);
+                }
+} catch (ApiException e) {
+                
+                Console.WriteLine("Status Code: "+ e.ErrorCode);
+                Console.WriteLine(e.StackTrace);
+                if(e.cFError != null) {
+                    Console.WriteLine(e.cFError.Message);
+                }
+}
+```
+
+### Fetch Refund Information
+
+Once the refund is initiated, we can check the status of that refund using this API. Below is the code snippet to check refund information.
+
+```
+try {
+                CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
+                CFConfig cfConfig = getConfig();
+                CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
+
+                var response = apiInstance.getRefund(cfConfig, order_id_for_refund, refundId, null);
+                
+                if(response != null) {
+                    Console.WriteLine(response?.cfRefund?.RefundAmount);
+                    Console.WriteLine(response?.cfHeaders);
+                }
+} catch (ApiException e) {
+                
+                Console.WriteLine("Status Code: "+ e.ErrorCode);
+                Console.WriteLine(e.StackTrace);
+                if(e.cFError != null) {
+                    Console.WriteLine(e.cFError.Message);
+                }
+}
+```
+
+### Get Settlements
+
+Below is the code snippet to retrieve order settlement information
+
+```
+try {
+                CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
+                CFConfig cfConfig = getConfig();
+                CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
+
+                var response = apiInstance.getSettlements(cfConfig, order_id_for_refund, null);
+                
+                if(response != null) {
+                    Console.WriteLine(response?.cfSettlementsEntity.OrderAmount);
+                    Console.WriteLine(response?.cfHeaders);
+                }
+} catch (ApiException e) {
+
+                Console.WriteLine("Status Code: "+ e.ErrorCode);
+                Console.WriteLine(e.StackTrace);
+                if(e.cFError != null) {
+                    Console.WriteLine(e.cFError.Message);
+                }
+}
+```
+
+### Get Saved Instruments By Customer ID
+
+Saved instrument information can be retrieved using this API. Below is the code snippet to retrieve instrument information.
+
+```
+try {
+                CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
+                CFConfig cfConfig = getConfig();
+                CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
+
+                var response = apiInstance.getAllSavedInstruments(cfConfig, customerId, "card", null);
+                
+                if(response != null) {
+                    Console.WriteLine(response?.cfInstruments[0].InstrumentId);
+                    Console.WriteLine(response?.cfHeaders);
+                }
+} catch (ApiException e) {
+                Console.WriteLine("Status Code: "+ e.ErrorCode);
+                Console.WriteLine(e.StackTrace);
+                if(e.cFError != null) {
+                    Console.WriteLine(e.cFError.Message);
+                }
+}
+```
+
+### Get Instrument by Instrument ID
+
+Saved instrument information can be retrieved using this API by using the instrument ID. Below is the code snippet to retrieve instrument information.
+
+```
+try {
+                CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
+                CFConfig cfConfig = getConfig();
+                CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
+
+                var response = apiInstance.getSavedInstrumentById(cfConfig, customerId, instrument_id, null);
+                
+                if(response != null) {
+                    Console.WriteLine(response?.cfInstrument.InstrumentId);
+                    Console.WriteLine(response?.cfInstrument.InstrumentDisplay);
+                    Console.WriteLine(response?.cfInstrument.InstrumentMeta.CardBankName);
+                    Console.WriteLine(response?.cfInstrument.InstrumentMeta.CardNetwork);
+                    Console.WriteLine(response?.cfInstrument.InstrumentMeta.CardType);
+                    Console.WriteLine(response?.cfHeaders);
+                }
+} catch (ApiException e) {
+                
+                Console.WriteLine("Status Code: "+ e.ErrorCode);
+                Console.WriteLine(e.StackTrace);
+                if(e.cFError != null) {
+                    Console.WriteLine(e.cFError.Message);
+                }
+}
+```
+
+### Get Instrument Cryptogram by Instrument ID
+
+Saved instrument's Cryptogram information can be retrieved using this API by using the instrument ID. Below is the code snippet to retrieve the same.
+
+```
+try {
+                CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
+                CFConfig cfConfig = getConfig();
+                CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
+                var response = apiInstance.getCryptogramByInstrumentID(cfConfig, customerId, instrument_id, null);
+                
+                if(response != null) {
+                    Console.WriteLine(response?.cfCryptogram.InstrumentId);
+                    Console.WriteLine(response?.cfCryptogram.Cryptogram);
+                    Console.WriteLine(response?.cfHeaders);
+                }
+} catch (ApiException e) {
+                Console.WriteLine("Status Code: "+ e.ErrorCode);
+                Console.WriteLine(e.StackTrace);
+                if(e.cFError != null) {
+                    Console.WriteLine(e.cFError.Message);
+                }
+}
+```
