@@ -3,13 +3,13 @@
 Use our Dotnet SDK to integrate the Cashfree Payment Gateway into your application.
 
 API version: `2022-01-01` \
-Package version: `1.0.7`
+Package version: `1.0.0`
 
 # Installing our Dotnet SDK
 
 Run the following command in the root level of your project.
 
-`dotnet add package cashfree-pg-sdk-dotnet --version 1.0.7`
+`dotnet add package cashfree-pg-sdk-dotnet --version 1.0.0`
 
 `Note:` For other installation modes, visit [here.](https://www.nuget.org/packages/cashfree-pg-sdkdotnet/)
 
