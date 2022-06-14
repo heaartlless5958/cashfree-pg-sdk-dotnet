@@ -11,7 +11,7 @@ Run the following command in the root level of your project.
 
 `dotnet add package cashfree-pg-sdk-dotnet --version 1.0.7`
 
-`Note:` For other installation modes, visit [here.](https://www.nuget.org/packages/cashfree-pg-sdkdotnet/)
+`Note:` For other installation modes, visit [here.](https://www.nuget.org/packages/cashfree-pg-sdk-dotnet)
 
 ### Dependencies
 
