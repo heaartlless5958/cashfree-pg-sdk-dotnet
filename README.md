@@ -9,7 +9,7 @@ Package version: `2.0.0`
 
 Run the following command in the root level of your project.
 
-`dotnet add package cashfree-pg-sdk-dotnet --version 2.0.0`
+`dotnet add package cashfree-pg-sdk-dotnet --version 2.0.1`
 
 `Note:` For other installation modes, visit [here.](https://www.nuget.org/packages/cashfree-pg-sdk-dotnet)
 
