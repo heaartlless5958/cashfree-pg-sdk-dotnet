@@ -2,14 +2,14 @@
 
 Use our Dotnet SDK to integrate the Cashfree Payment Gateway into your application.
 
-API version: `2022-01-01` \
-Package version: `1.0.7`
+API version: `2022-09-01` \
+Package version: `2.0.2`
 
 # Installing our Dotnet SDK
 
 Run the following command in the root level of your project.
 
-`dotnet add package cashfree-pg-sdk-dotnet --version 1.0.7`
+`dotnet add package cashfree-pg-sdk-dotnet --version 2.0.2`
 
 `Note:` For other installation modes, visit [here.](https://www.nuget.org/packages/cashfree-pg-sdk-dotnet)
 
@@ -65,8 +65,8 @@ var customerDetails = new CFCustomerDetails(
                 customerPhone: "9999999999"
             );
 var orderMeta = new CFOrderMeta(
-                notifyUrl: "https://merchant.in/pg/process_return?cf_id={order_id}&cf_token={order_token}", 
-                returnUrl: "https://merchant.in/pg/process_return?cf_id={order_id}&cf_token={order_token}"
+                notifyUrl: "https://merchant.in/pg/process_return?cf_id={order_id}", 
+                returnUrl: "https://merchant.in/pg/process_return?cf_id={order_id}"
             );
 var cFOrderRequest = new CFOrderRequest(
                 orderAmount: 1.0, 
@@ -84,9 +84,10 @@ try {
                 CFOrderResponse result = apiInstance.orderCreate(cfConfig, cFOrderRequest, cfHeader);
                 
                 if(result != null) {
-                    Console.WriteLine(result?.cfOrder?.OrderToken);
+                    Console.WriteLine(result?.cfOrder?.PaymentSessionId);
+                    Console.WriteLine(result?.cfOrder?.OrderToken); // Will be null in 2022-09-01
                     Console.WriteLine(result?.cfOrder?.OrderId);
-                    Console.WriteLine(result?.cfOrder?.PaymentLink);
+                    Console.WriteLine(result?.cfOrder?.PaymentLink); // Will be null in 2022-09-01
                     Console.WriteLine(result?.cfHeaders);
                 }
 } catch (ApiException e) {
@@ -104,21 +105,21 @@ try {
 
 # Pay Order
 
-Once you have created the order, you can use the order to initiate payment. Order creation API returns "order_token" which contains information about the order and that has to be used in payment initiation stage. Cashfree provides multiple payment methods to choose to make payments for an order, namely, UPI, Netbanking, Wallet, Card, Card EMI, Cardless EMI and Pay later.
+Once you have created the order, you can use the order to initiate payment. Order creation API returns "payment_session_id" which contains information about the order and that has to be used in payment initiation stage. Cashfree provides multiple payment methods to choose to make payments for an order, namely, UPI, Netbanking, Wallet, Card, Card EMI, Cardless EMI and Pay later.
 
 ### Pay Order with Card
 Below is the code to initiate payment with Card
 
 ```
-var order_token = "";
+var payment_session_id = "";
 var customerDetails = new CFCustomerDetails(
                 customerId: "some_random_id", 
                 customerEmail: "sample@gmail.com", 
                 customerPhone: "9999999999"
             );
 var orderMeta = new CFOrderMeta(
-                notifyUrl: "https://merchant.in/pg/process_return?cf_id={order_id}&cf_token={order_token}", 
-                returnUrl: "https://merchant.in/pg/process_return?cf_id={order_id}&cf_token={order_token}"
+                notifyUrl: "https://merchant.in/pg/process_return?cf_id={order_id}", 
+                returnUrl: "https://merchant.in/pg/process_return?cf_id={order_id}"
             );
 var cFOrderRequest = new CFOrderRequest(
                 orderAmount: 1.0, 
@@ -137,10 +138,10 @@ try {
                 
                 if(result != null) {
 
-                    // Here we will take the order_token, which will be used for order pay
-                    order_token = result?.cfOrder?.OrderToken
+                    // Here we will take the payment_session_id, which will be used for order pay
+                    payment_session_id = result?.cfOrder?.PaymentSessionId
 
-                    Console.WriteLine(result?.cfOrder?.OrderToken);
+                    Console.WriteLine(result?.cfOrder?.PaymentSessionId);
                     Console.WriteLine(result?.cfOrder?.OrderId);
                     Console.WriteLine(result?.cfOrder?.PaymentLink);
                     Console.WriteLine(result?.cfHeaders);
@@ -161,14 +162,14 @@ try {
 
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFCardPayment);
 
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(payment_session_id, cFPaymentMethod, null);
 
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
 
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, cfHeader);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, cfHeader);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data.Url);
@@ -184,7 +185,7 @@ try {
 }
 ```
 
-`Note:` Order has to be created and then the order_token has to be used to make the payments for all the other payment methods as well. This step is covered in the above example and the same step has to be followed for all other payment methods.
+`Note:` Order has to be created and then the payment_session_id has to be used to make the payments for all the other payment methods as well. This step is covered in the above example and the same step has to be followed for all other payment methods.
 
 ### Pay Order with Saved Card
 
@@ -196,13 +197,13 @@ try {
                 CFCardPayment cFCardPayment = new CFCardPayment(cFCard);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFCardPayment);
 
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(payment_session_id, cFPaymentMethod, null);
 
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, cfHeader);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, cfHeader);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data.Url);
@@ -227,13 +228,13 @@ try {
                 CFUPI cfUpi = new CFUPI("collect", "testsuccess@gocash");
                 CFUPIPayment cFUPIPayment = new CFUPIPayment(cfUpi);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFUPIPayment);
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(Product.order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(Product.payment_session_id, cFPaymentMethod, null);
 
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
 
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, null);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, null);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data);
@@ -256,12 +257,12 @@ try {
                 CFUPI cfUpi = new CFUPI("link");
                 CFUPIPayment cFUPIPayment = new CFUPIPayment(cfUpi);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFUPIPayment);
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(Product.order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(Product.payment_session_id, cFPaymentMethod, null);
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, null);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, null);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data);
@@ -284,12 +285,12 @@ try {
                 CFUPI cfUpi = new CFUPI("qrcode");
                 CFUPIPayment cFUPIPayment = new CFUPIPayment(cfUpi);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFUPIPayment);
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(Product.order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(Product.payment_session_id, cFPaymentMethod, null);
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, null);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, null);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data);
@@ -314,12 +315,12 @@ try {
                 CFNetbanking cfnetBanking = new CFNetbanking("link", 3003);
                 CFNetbankingPayment cFNetbankingPayment = new CFNetbankingPayment(cfnetBanking);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFNetbankingPayment);
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(Product.order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(Product.payment_session_id, cFPaymentMethod, null);
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
                 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, null);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, null);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data.Url);
@@ -346,12 +347,12 @@ try {
                 CFApp cfApp = new CFApp("phonepe", "8904216227", "link");
                 CFAppPayment cFAppPayment = new CFAppPayment(cfApp);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFAppPayment);
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(Product.order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(Product.payment_session_id, cFPaymentMethod, null);
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, null);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, null);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data.Url);
@@ -377,12 +378,12 @@ try {
                 CFPaylater cfPaylater = new CFPaylater("link", "lazypay", "9999999999");
                 CFPaylaterPayment cFPaylaterPayment = new CFPaylaterPayment(cfPaylater);
                 CFPaymentMethod cFPaymentMethod = new CFPaymentMethod(cFPaylaterPayment);
-                CFOrderPayRequest cFOrderPayRequest = new CFOrderPayRequest(Product.order_token, cFPaymentMethod, null);
+                CFOrderPaySessionsRequest CFOrderPaySessionsRequest = new CFOrderPaySessionsRequest(Product.payment_session_id, cFPaymentMethod, null);
                 CFPaymentGateway apiInstance = CFPaymentGateway.getInstance;
 
                 CFConfig cfConfig = getConfig();
                 CFHeader cfHeader = getHeader(); // Create CFHeader as mentioned above
-                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, cFOrderPayRequest, null);
+                CFPayResponse cfPayResponse = apiInstance.orderPay(cfConfig, CFOrderPaySessionsRequest, null);
                 
                 if(cfPayResponse != null) {
                     Console.WriteLine(cfPayResponse.cfOrderPayResponse.Data.Url);
