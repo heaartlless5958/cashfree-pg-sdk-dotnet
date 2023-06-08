@@ -3,13 +3,13 @@
 Use our Dotnet SDK to integrate the Cashfree Payment Gateway into your application.
 
 API version: `2022-09-01` \
-Package version: `2.0.2`
+Package version: `2.1.0`
 
 # Installing our Dotnet SDK
 
 Run the following command in the root level of your project.
 
-`dotnet add package cashfree-pg-sdk-dotnet --version 2.0.2`
+`dotnet add package cashfree-pg-sdk-dotnet --version 2.1.0`
 
 `Note:` For other installation modes, visit [here.](https://www.nuget.org/packages/cashfree-pg-sdk-dotnet)
 
@@ -19,7 +19,8 @@ Run the following command in the root level of your project.
 2. #### Newtonsoft.Json (>= 13.0.1)
 3. #### Polly (>= 7.2.2)
 4. #### RestSharp (>= 106.13.0)
-5. #### System.ComponentModel.Annotations (>= 5.0.0)
+5. #### Sentry (>= 3.31.0)
+6. #### System.ComponentModel.Annotations (>= 5.0.0)
 
 ---
 
@@ -37,7 +38,7 @@ using cashfreepg.Interface;
 The CFConfig consists of properties such as Client-ID, Client-Secret-Key and some more which are mandatory. An instance of CFConfig is required for all the method calls that are exposed by the SDK. The following is the code snippet to create a CFConfig:-
 
 ```
-var cfConfig = new CFConfig(CFEnvironment.PRODUCTION, "2022-01-01", "1848d0ce8441fb8ffa258bc98481", "f7cbcd7ba238c4f85a4083c39f9386be33de1214");
+var cfConfig = new CFConfig(CFEnvironment.PRODUCTION, "2022-09-01", "1848d0ce8441fb8ffa258bc98481", "f7cbcd7ba238c4f85a4083c39f9386be33de1214");
 
 // CFEnvironment is an enum consisting of PRODUCTION and SANDBOX as 2 possible values.
 ```
